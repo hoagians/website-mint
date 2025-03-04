@@ -1,0 +1,25 @@
+.countdown {
+  align-content: center;
+  background-color: #0a0a0a;
+  border-radius: 8px;
+  color: lime;
+  font-family: Roboto, monospace;
+  height: 50px;
+  margin-top: 8px;
+  text-align: center;
+  width: 100%;
+}
+
+.date {
+  font-size: 14px;
+}
+
+.separator {
+  margin: 0 8px;
+}
+
+@media only screen and (max-width: 1200px) {
+  .countdown {
+    color: limegreen;
+  }
+}

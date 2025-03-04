@@ -1,0 +1,149 @@
+html,
+body,
+main {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+body {
+  background-color: #121212;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url("/background.webp");
+  background-position: center;
+  background-size: 100% 100%;
+  color: white;
+  font-family: system-ui;
+  justify-content: center;
+  overflow: hidden;
+  transition: background-position 0.1s ease-out;
+}
+
+main {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+h1,
+p {
+  margin: 0;
+}
+
+a {
+  color: lime;
+  text-decoration: none;
+}
+
+a:hover {
+  opacity: 0.5;
+}
+
+button {
+  background-color: limegreen;
+  border: none;
+  border-radius: 8px;
+  color: #141414;
+  cursor: pointer;
+  font-family: system-ui;
+  font-size: 16px;
+  font-weight: 600;
+  transition: all 0.2s linear;
+}
+
+button:hover {
+  opacity: 0.75;
+}
+
+button:disabled {
+  background-color: #b4b6b8;
+  cursor: not-allowed;
+}
+
+.container {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  font-size: 14px;
+  gap: 24px;
+}
+
+.footer {
+  color: white;
+  display: unset;
+  font-size: 12px;
+  opacity: 0.6;
+  padding-top: 8px;
+  text-align: center;
+  align-items: center;
+}
+
+.sup {
+  font-size: 14px;
+  display: unset;
+  margin: 6px 0 0 2px;
+}
+
+.tab-content {
+  background-color: #222222;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  max-height: 360px;
+  min-height: 180px;
+  padding: 20px;
+  width: 280px;
+}
+
+@media only screen and (max-width: 1200px) {
+  a {
+    color: limegreen;
+  }
+  body {
+    background-image: none;
+  }
+}
+
+@media only screen and (max-width: 1200px) and (orientation: portrait) {
+  .container {
+    flex-direction: column;
+    gap: 15px;
+  }
+  /* .sup {
+    display: none;
+  } */
+}
+
+@media only screen and (orientation: landscape) {
+  .footer {
+    display: none;
+  }
+}
+
+@media only screen and (max-height: 667px) and (orientation: portrait) {
+  .container {
+    gap: 10px;
+  }
+  .footer {
+    display: none;
+  }
+}
+
+@media only screen and (max-width: 667px) and (orientation: landscape) {
+  .container {
+    gap: 10px;
+  }
+}
+
+@media (hover: none) and (pointer: coarse) {
+  a:hover {
+    opacity: 1;
+  }
+
+  button:hover {
+    border-color: initial;
+    opacity: 1;
+  }
+}

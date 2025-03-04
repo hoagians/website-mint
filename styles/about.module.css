@@ -1,0 +1,22 @@
+.address {
+  border-bottom: 1px solid #444;
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0 15px;
+}
+
+.description {
+  line-height: 1.6;
+  margin: auto;
+  max-width: 280px;
+  text-align: justify;
+}
+
+.tooltip {
+  background-color: #0a0a0a;
+  border: 1px solid #555555;
+  border-radius: 8px;
+  font-size: 12px;
+  padding: 10px;
+  text-align: center;
+}

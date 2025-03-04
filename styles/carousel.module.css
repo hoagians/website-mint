@@ -1,0 +1,85 @@
+.carousel {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  position: relative;
+}
+
+.images {
+  border-radius: 8px;
+  height: 320px;
+  width: 320px;
+}
+
+.prevButton,
+.nextButton {
+  align-items: center;
+  background-color: transparent;
+  border: none;
+  border-radius: 50%;
+  box-shadow: 4px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  display: flex;
+  height: 25px;
+  justify-content: center;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  transition: background-color 0.3s;
+  width: 25px;
+  z-index: auto;
+}
+
+.prevButton {
+  left: 10px;
+}
+
+.nextButton {
+  right: 10px;
+}
+
+.prevButton:hover,
+.nextButton:hover {
+  background-color: transparent;
+}
+
+.indicators {
+  align-items: center;
+  bottom: 10px;
+  display: flex;
+  gap: 5px;
+  justify-content: center;
+  position: absolute;
+}
+
+.indicator {
+  background-color: #121212;
+  border-radius: 50%;
+  cursor: pointer;
+  display: inline-block;
+  height: 10px;
+  margin: 0 5px;
+  transition: background-color 0.6s ease;
+  width: 10px;
+}
+
+.indicator:hover {
+  background-color: #121212;
+}
+
+.indicator.active {
+  background-color: lime;
+}
+
+@media only screen and (max-width: 1200px) {
+  .indicator.active {
+    background-color: limegreen;
+  }
+}
+
+@media only screen and (min-width: 1200px) {
+  .images {
+    height: 420px;
+    width: 420px;
+  }
+}

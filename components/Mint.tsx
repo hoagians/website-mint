@@ -1,0 +1,207 @@
+"use client";
+
+import { mplCore } from "@metaplex-foundation/mpl-core";
+import { Transaction } from "@metaplex-foundation/umi";
+import { createUmi } from "@metaplex-foundation/umi-bundle-defaults";
+import { walletAdapterIdentity } from "@metaplex-foundation/umi-signer-wallet-adapters";
+import { base64 } from "@metaplex-foundation/umi/serializers";
+import { sendGTMEvent } from "@next/third-parties/google";
+import * as Sentry from "@sentry/nextjs";
+import { useConnection, useWallet } from "@solana/wallet-adapter-react";
+import { addMinutes, isWithinInterval, subMinutes } from "date-fns";
+import React, { useCallback, useEffect, useState } from "react";
+import { startStage1, startStage2, startStage3 } from "../app/lib/constants";
+import { MintProps } from "../app/lib/interfaces";
+import { actionsAfterMint, deleteAssetId } from "../app/services/HandlingService";
+import { createAssetTx } from "../app/services/TxService";
+import { getExplorerUrl } from "../app/utils/helpers";
+import styles from "../styles/mint.module.css";
+import { Countdown } from "./Countdown";
+import { MintInfo } from "./MintInfo";
+import { WalletButton } from "./WalletButton";
+
+const isNowWithinInterval = (date: Date): boolean => {
+  const NOW = Date.now();
+  const startDate = subMinutes(date, 5);
+  const endDate = addMinutes(date, 5);
+  return isWithinInterval(NOW, { start: startDate, end: endDate });
+};
+
+export const Mint: React.FC<MintProps> = ({ numMinted, solPrice, onNumMintedChange, onQuantityChange }) => {
+  const walletAdapter = useWallet();
+  const { publicKey } = walletAdapter;
+  const { connection } = useConnection();
+
+  const umi = createUmi(connection).use(mplCore());
+
+  const [enabled, setEnabled] = useState<boolean>(startStage1.getTime() < Date.now());
+  const [formMessage, setFormMessage] = useState<string | JSX.Element | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [mintPrice, setMintPrice] = useState<number | null>(null);
+  const [numMintedAssets, setNumMintedAssets] = useState<number | null>(null);
+  const [spinner, setSpinner] = useState<boolean>(true);
+
+  useEffect(() => {
+    if (!numMinted || !solPrice) return;
+    setMintPrice(solPrice);
+    setNumMintedAssets(numMinted);
+    setIsLoading(false);
+    setSpinner(false);
+  }, [numMinted, solPrice]);
+
+  const handleMintSuccess = useCallback(
+    async (assetId: number, asset: string, owner: string, isWhitelisted: boolean, isPartner: boolean, price: number) => {
+      const explorerUrl = getExplorerUrl(asset);
+
+      setFormMessage(
+        <span>
+          Success! View on{" "}
+          <a target="_blank" title="Link to SolanaFM" href={explorerUrl} rel="noopener noreferrer">
+            SolanaFM
+          </a>
+          .
+        </span>
+      );
+
+      setTimeout(() => setFormMessage(null), 10000);
+
+      try {
+        await actionsAfterMint({ assetId, asset, owner, isWhitelisted, isPartner });
+      } catch (error) {
+        Sentry.captureException(error);
+      }
+
+      sendGTMEvent({
+        event: "purchase",
+        transaction_id: String(assetId),
+        value: price,
+        currency: "USD",
+        items: [{ item_id: String(assetId), item_name: String(assetId) }],
+      });
+
+      Sentry.withIsolationScope(() => {
+        Sentry.setTag("assetId", assetId);
+        Sentry.setTag("nft", asset);
+        Sentry.setTag("owner", owner);
+        Sentry.captureMessage(`MintedAsset`);
+      });
+    },
+    []
+  );
+
+  const handleMintError = useCallback(async (error: Error | string, id?: number) => {
+    setFormMessage(typeof error === "string" ? error : error.message);
+    // console.log("🔴 ERROR minting asset:", typeof error === "string" ? error : error.message);
+
+    setTimeout(() => setFormMessage(null), 30000);
+
+    try {
+      if (typeof id === "number") await deleteAssetId(id);
+    } catch (error) {
+      Sentry.captureException(error);
+    }
+
+    Sentry.captureException(new Error(typeof error === "string" ? error : error.message));
+  }, []);
+
+  const handleMint = useCallback(async () => {
+    let assetId;
+    let anyError = null;
+
+    try {
+      setSpinner(true);
+      // console.time("⚪ Time:");
+      if (!publicKey) throw new Error("Wallet not connected!");
+      umi.use(walletAdapterIdentity(walletAdapter, true));
+
+      const solBalance = await connection.getBalance(publicKey).then((balance) => balance / 1e9);
+      if (solBalance < solPrice!) throw new Error("Insufficient balance!");
+
+      const response = await fetch("https://api.ipify.org?format=json");
+      const data = await response.json();
+      // console.log("🟡 Seu IP é:", data.ip);
+
+      const { id, assetPublicKey, price, isWhitelisted, isPartner, serializedTxAsString, error } = await createAssetTx(
+        umi.identity.publicKey,
+        data.ip
+      );
+
+      assetId = id;
+
+      // console.log("🟡 assetId:", assetId);
+      // console.log("🟡 assetPublicKey:", assetPublicKey);
+      // console.log("🟡 price:", price);
+      // console.log("🟡 isWhitelisted:", isWhitelisted);
+      // console.log("🟡 isPartner:", isPartner);
+
+      if (error) throw new Error(error);
+      if (price === 0) setMintPrice(price);
+
+      // Decode the String to Uint8Array to make it usable
+      const deserializedTxAsU8 = base64.serialize(serializedTxAsString);
+
+      // Deserialize the Transaction returned by the Backend
+      const deserializedTx = umi.transactions.deserialize(deserializedTxAsU8);
+
+      // Sign the Transaction with the Keypair that we got from the walletAdapter
+      const timeout = (tx: Transaction) => {
+        return new Promise<void>((_, reject) => {
+          setTimeout(() => reject("Transaction expired! Please try again."), 10000);
+        });
+      };
+      const signedTransactionWithTimeout = async (tx: Transaction) => {
+        return await Promise.race([umi.identity.signTransaction(tx), timeout(tx)]);
+      };
+      // console.timeLog("⚪ Time:");
+      const signedDeserializedTx = await signedTransactionWithTimeout(deserializedTx);
+      if (!signedDeserializedTx) throw new Error("Transaction failed! Please try again.");
+      // console.timeLog("⚪ Time:");
+
+      // Send the Transaction to the Solana Network
+      const signature = await umi.rpc.sendTransaction(signedDeserializedTx);
+
+      // Confirm the Transaction on the Solana Network
+      const result = await umi.rpc.confirmTransaction(signature, {
+        strategy: { type: "blockhash", ...(await umi.rpc.getLatestBlockhash()) },
+      });
+
+      handleMintSuccess(assetId, assetPublicKey, publicKey.toString(), isWhitelisted, isPartner, price);
+    } catch (error) {
+      anyError = error;
+      handleMintError(error as Error | string, assetId);
+    } finally {
+      setMintPrice(solPrice);
+      if (!anyError) onNumMintedChange(assetId);
+      if (isNowWithinInterval(startStage2) || isNowWithinInterval(startStage3)) onQuantityChange();
+      setSpinner(false);
+      // console.timeEnd("⚪ Time:");
+    }
+  }, [connection, publicKey, onNumMintedChange]);
+
+  return (
+    <>
+      <MintInfo numMinted={numMintedAssets} solPrice={mintPrice} />
+      <div style={{ position: "relative", width: "100%" }}>
+        <button
+          onClick={() => {
+            sendGTMEvent({ event: "begin_checkout", value: mintPrice, currency: "USD" });
+            handleMint();
+          }}
+          style={{ height: "50px", width: "100%" }}
+          disabled={!enabled || !publicKey || spinner || numMintedAssets === 7777}
+        >
+          Mint
+        </button>
+        {spinner && <span className={styles.spinner}></span>}
+      </div>
+      {isLoading ? (
+        <div className={styles.skeleton} />
+      ) : enabled ? (
+        <WalletButton />
+      ) : (
+        <Countdown onEnabledChange={(value) => setEnabled(value)} />
+      )}
+      {formMessage && <div className={styles.message}>{formMessage}</div>}
+    </>
+  );
+};

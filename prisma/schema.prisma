@@ -1,0 +1,59 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  previewFeatures = ["driverAdapters", "tracing"]
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model Assets {
+  id          Int       @id @default(autoincrement())
+  price       Float
+  asset       String
+  owner       String
+  ipAddress   String?
+  city        String?
+  country     String?
+  asOrg       String?
+  timezone    String?
+  createdAt   DateTime  @default(now())
+}
+
+model Whitelist {
+  id            Int       @id @default(autoincrement())
+  userId        String
+  walletAddress String    @unique
+  hasMinted     Boolean   @default(false)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model Partners {
+  id            Int       @id @default(autoincrement())
+  walletAddress String    @unique
+  quantity      Int       @default(0)
+  minted        Int       @default(0)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model Blocked {
+  id          Int       @id @default(autoincrement())
+  ipAddress   String?
+  city        String?
+  country     String?
+  asOrg       String?
+  timezone    String?
+  createdAt   DateTime  @default(now())  
+}
+
+model Records {
+  id        Int    @id @default(autoincrement())
+  metadata  String
+  image     String
+}

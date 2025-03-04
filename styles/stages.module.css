@@ -1,0 +1,54 @@
+.descriptionActive {
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  line-height: 1.3;
+}
+
+.descriptionInactive {
+  color: gray;
+  display: flex;
+  justify-content: space-between;
+  line-height: 1.3;
+}
+
+.info {
+  cursor: help;
+  margin: 0 5px -2px;
+}
+
+.infoInactive {
+  cursor: none;
+  margin: 0 5px -2px;
+}
+
+.titleActive {
+  color: lime;
+  display: flex;
+  justify-content: space-between;
+  line-height: 1.3;
+}
+
+.titleInactive {
+  color: gray;
+  display: flex;
+  justify-content: space-between;
+  line-height: 1.3;
+}
+
+.tooltip {
+  background-color: #0a0a0a;
+  border: 1px solid #555555;
+  border-radius: 8px;
+  font-size: 12px;
+  line-height: 1.5;
+  max-width: 165px;
+  padding: 10px;
+  text-align: center;
+}
+
+@media only screen and (max-width: 1200px) {
+  .titleActive {
+    color: limegreen;
+  }
+}
