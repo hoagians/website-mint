@@ -1,4 +1,4 @@
-import { BASE_URL, COLLECTION_NAME, GTM_ID, METADATA_DESCRIPTION } from "@/app/lib/constants";
+import { BASE_URL, COLLECTION_NAME, METADATA_DESCRIPTION } from "@/app/lib/constants";
 import { ICON_IMG } from "@/app/lib/images";
 import { GoogleTagManager } from "@next/third-parties/google";
 import type { Metadata, Viewport } from "next";

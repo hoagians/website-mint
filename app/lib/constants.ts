@@ -2,7 +2,6 @@
 export const COLLECTION_NAME = "Hoagians"; // Name and username should be the same
 export const COLLECTION_DESCRIPTION = `Hoagians is an innovative collection of NFTs with an alien design. Each Hoagian is unique and surprising. Hoagians are the new trend in the market with potential for appreciation. Get your NFT before it’s gone!`;
 export const METADATA_DESCRIPTION = `Hoagians is an innovative collection of NFTs with an alien design. Each Hoagian is unique and surprising. Get your NFT before it’s gone!`;
-export const GTM_ID = "GTM-NWGLGTB6";
 
 // URLs
 export const BASE_URL = String(process.env.NEXT_PUBLIC_BASE_URL);
