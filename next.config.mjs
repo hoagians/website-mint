@@ -38,7 +38,10 @@ const nextConfig = {
       },
     ];
   },
-  output: 'standalone',
+  experimental: {
+    nftTracing: true,
+  },
+  output: "standalone",
   outputFileTracingIncludes: {
     "/**/*": ["./GeoLite2-City.mmdb", "./GeoLite2-ASN.mmdb"],
   },
