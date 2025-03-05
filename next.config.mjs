@@ -1,7 +1,6 @@
 /** @type {import('next').NextConfig} */
 import withBundleAnalyzer from "@next/bundle-analyzer";
 import { withSentryConfig } from "@sentry/nextjs";
-import "dotenv/config";
 
 const nextConfig = {
   async headers() {
@@ -37,13 +36,6 @@ const nextConfig = {
         ],
       },
     ];
-  },
-  experimental: {
-    nftTracing: true,
-  },
-  output: "standalone",
-  outputFileTracingIncludes: {
-    "/**/*": ["./GeoLite2-City.mmdb", "./GeoLite2-ASN.mmdb"],
   },
 };
 
