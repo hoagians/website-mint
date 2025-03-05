@@ -38,6 +38,9 @@ const nextConfig = {
       },
     ];
   },
+  outputFileTracingIncludes: {
+    "/**/*": ["./app/mmdb/GeoLite2-City.mmdb", "./app/mmdb/GeoLite2-ASN.mmdb"],
+  },
 };
 
 // export default withBundleAnalyzer({

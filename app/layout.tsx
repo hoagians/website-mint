@@ -6,6 +6,9 @@ import { BackgroundEffect } from "../components/BackgroundEffect";
 import WalletProviderApp from "../components/WalletProviderApp";
 import "../styles/globals.css";
 
+const GTM_ID = String(process.env.NEXT_PUBLIC_GTM_ID);
+const FB_APP_ID = String(process.env.NEXT_PUBLIC_FB_APP_ID);
+
 export const metadata: Metadata = {
   title: COLLECTION_NAME,
   description: METADATA_DESCRIPTION,
@@ -53,8 +56,8 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <GoogleTagManager gtmId="GTM-NWGLGTB6" />
-      <meta property="fb:app_id" content="1989322008254480" />
+      <GoogleTagManager gtmId={GTM_ID} />
+      <meta property="fb:app_id" content={FB_APP_ID} />
       <body>
         <BackgroundEffect />
         <WalletProviderApp>{children}</WalletProviderApp>
