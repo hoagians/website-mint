@@ -12,7 +12,7 @@ import {
   PRICE3,
   RPC_URL,
   startStage2,
-  startStage3
+  startStage3,
 } from "@/app/lib/constants";
 import {
   getAssetsByOwner,
@@ -224,6 +224,12 @@ export const createAssetTx = async (owner: PublicKey, ip: string): Promise<any> 
   } catch (error) {
     // console.error("🔴 Service ERROR getting tx:", (error as Error).message);
     Sentry.captureException(error);
+
+    if (error instanceof Error && (error.message.includes("wallet") || error.message.includes("busy"))) {
+      throw error;
+    } else {
+      throw new Error("Server error. Please try again later.");
+    }
   } finally {
     console.timeEnd("⚪ Time:");
   }
