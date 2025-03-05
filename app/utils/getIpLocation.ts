@@ -8,8 +8,8 @@ export const getIpLocation = async (ip: string): Promise<any> => {
   try {
     // Opens database readers concurrently
     const [cityReader, asnReader] = await Promise.all([
-      Reader.open(path.resolve(process.cwd(), "app/data/GeoLite2-City.mmdb")),
-      Reader.open(path.resolve(process.cwd(), "app/data/GeoLite2-ASN.mmdb")),
+      Reader.open(path.resolve(process.cwd(), "GeoLite2-City.mmdb")),
+      Reader.open(path.resolve(process.cwd(), "GeoLite2-ASN.mmdb")),
     ]);
     // Get city and ASN information in parallel
     const [cityData, asnData] = await Promise.all([cityReader.city(ip), asnReader.asn(ip)]);

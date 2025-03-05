@@ -11,9 +11,8 @@ import {
   PRICE2,
   PRICE3,
   RPC_URL,
-  startStage1,
   startStage2,
-  startStage3,
+  startStage3
 } from "@/app/lib/constants";
 import {
   getAssetsByOwner,
@@ -41,7 +40,7 @@ import { addHours, differenceInMilliseconds, isAfter } from "date-fns";
 import { Base64 } from "js-base64";
 import { getPartnerStatus } from "../lib/prisma/Partners";
 import { getRecord } from "../lib/prisma/Records";
-import { getWhitelistEntry, getWhitelistHasMinted } from "../lib/prisma/Whitelist";
+import { getWhitelistEntry } from "../lib/prisma/Whitelist";
 import { getIpLocation } from "../utils/getIpLocation";
 
 const NOW = Date.now();
@@ -72,7 +71,6 @@ export const createAssetTx = async (owner: PublicKey, ip: string): Promise<any> 
       fetchedCollection,
       mintedAssets,
       purchasedAssets,
-      hasMinted,
       assetId,
       assetsByOwner,
       whitelistEntry,
@@ -82,7 +80,6 @@ export const createAssetTx = async (owner: PublicKey, ip: string): Promise<any> 
       fetchCollection(umi, COLLECTION),
       getMintedAssets(),
       getPurchasedAssets(),
-      getWhitelistHasMinted(),
       getLowestAvailableId(),
       getAssetsByOwner(owner),
       getWhitelistEntry(owner),
@@ -91,9 +88,7 @@ export const createAssetTx = async (owner: PublicKey, ip: string): Promise<any> 
     ]);
 
     const { city, country, asOrg, timezone } = locationFromIp;
-    const isPayer = !partnerStatus && (!whitelistEntry || whitelistEntry.hasMinted);
     const isWhitelisted = whitelistEntry && !whitelistEntry.hasMinted;
-    const isWhitelistedHasMinted = whitelistEntry && whitelistEntry.hasMinted;
     const isPartner = partnerStatus ? true : false;
 
     // console.log("🟡 numMinted:", fetchedCollection.numMinted);
@@ -103,12 +98,11 @@ export const createAssetTx = async (owner: PublicKey, ip: string): Promise<any> 
     // console.log("🟡 assetsByOwner:", assetsByOwner);
     // console.log("🟡 whitelistEntry:", whitelistEntry);
     // console.log("🟡 partnerStatus:", partnerStatus);
-    // console.log("🟡 isPayer:", isPayer);
     // console.log("🟡 isWhitelisted:", isWhitelisted);
     // console.log("🟡 isPartner:", isPartner);
     // console.log("🟡 locationFromIp:", locationFromIp);
 
-    if (assetsByOwner >= MAX_PER_WALLET) {
+    if (MAX_PER_WALLET <= assetsByOwner) {
       throw new Error("Minting not allowed! This wallet has reached its minting limit.");
     }
 
@@ -137,14 +131,6 @@ export const createAssetTx = async (owner: PublicKey, ip: string): Promise<any> 
           `This wallet can only mint once every ${hoursToTheNextMint} hours! Please try again in ${hours}h ${minutes}m.`
         );
       }
-    }
-
-    if (!isPartner && !isWhitelisted && NOW < startStage1.getTime()) {
-      throw new Error("This wallet is not whitelisted! Use Discord to join the whitelist.");
-    }
-
-    if (isWhitelistedHasMinted && NOW < startStage1.getTime()) {
-      throw new Error("This wallet has already minted during the whitelist period.");
     }
 
     const calculatePrice = (purchasedAssets: number) => {

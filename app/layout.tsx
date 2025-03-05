@@ -22,14 +22,22 @@ export const metadata: Metadata = {
     title: COLLECTION_NAME,
     description: COLLECTION_DESCRIPTION,
     url: BASE_URL,
-    images: [{ url: "/collection.jpg", width: 1024, height: 1024, alt: "Image of a Hoagian" }],
+    images: [
+      { url: "/1200x630.jpg", width: 1200, height: 630, alt: "Image of a Hoagian" },
+      { url: "/630x315.jpg", width: 630, height: 315, alt: "Image of a Hoagian" },
+      { url: "/1024x1024.jpg", width: 1024, height: 1024, alt: "Image of a Hoagian" },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     site: COLLECTION_NAME.toLowerCase(), // X username
     title: COLLECTION_NAME,
     description: COLLECTION_DESCRIPTION,
-    images: [{ url: "/collection.jpg", width: 1024, height: 1024, alt: "Image of a Hoagian" }],
+    images: [
+      { url: "/1200x630.jpg", width: 1200, height: 630, alt: "Image of a Hoagian" },
+      { url: "/630x315.jpg", width: 630, height: 315, alt: "Image of a Hoagian" },
+      { url: "/1024x1024.jpg", width: 1024, height: 1024, alt: "Image of a Hoagian" },
+    ],
   },
 };
 

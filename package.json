@@ -6,15 +6,12 @@
     "node": "20.18.3"
   },
   "scripts": {
-    "commands": "npx tsx --env-file=.env scripts/commands.ts",
-    "token": "openssl rand -base64 32",
-    "crypto": "npx tsx scripts/crypto.ts",
-    "dev": "next dev",
+    "analyze": "ANALYZE=true next build",
     "build": "next build",
-    "postinstall": "prisma generate",
-    "start": "next start",
+    "dev": "next dev",
     "lint": "next lint --fix",
-    "analyze": "ANALYZE=true next build"
+    "start": "next start",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@chakra-ui/next-js": "^2.2.0",
