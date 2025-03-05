@@ -53,7 +53,8 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <GoogleTagManager gtmId={GTM_ID} />
+      <GoogleTagManager gtmId="GTM-NWGLGTB6" />
+      <meta property="fb:app_id" content="1989322008254480" />
       <body>
         <BackgroundEffect />
         <WalletProviderApp>{children}</WalletProviderApp>
