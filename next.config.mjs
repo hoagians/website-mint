@@ -38,6 +38,7 @@ const nextConfig = {
       },
     ];
   },
+  output: 'standalone',
   outputFileTracingIncludes: {
     "/**/*": ["./GeoLite2-City.mmdb", "./GeoLite2-ASN.mmdb"],
   },
