@@ -1,4 +1,4 @@
-import { BASE_URL, COLLECTION_DESCRIPTION, COLLECTION_NAME, GTM_ID } from "@/app/lib/constants";
+import { BASE_URL, COLLECTION_NAME, GTM_ID, METADATA_DESCRIPTION } from "@/app/lib/constants";
 import { ICON_IMG } from "@/app/lib/images";
 import { GoogleTagManager } from "@next/third-parties/google";
 import type { Metadata, Viewport } from "next";
@@ -8,7 +8,7 @@ import "../styles/globals.css";
 
 export const metadata: Metadata = {
   title: COLLECTION_NAME,
-  description: COLLECTION_DESCRIPTION,
+  description: METADATA_DESCRIPTION,
   metadataBase: new URL(BASE_URL),
   icons: {
     icon: [{ url: ICON_IMG, sizes: "512x512", type: "image/svg+xml", rel: "icon", fetchPriority: "high" }],
@@ -20,23 +20,21 @@ export const metadata: Metadata = {
     type: "website",
     siteName: COLLECTION_NAME,
     title: COLLECTION_NAME,
-    description: COLLECTION_DESCRIPTION,
+    description: METADATA_DESCRIPTION,
     url: BASE_URL,
     images: [
       { url: "/1200x630.jpg", width: 1200, height: 630, alt: "Image of a Hoagian" },
       { url: "/630x315.jpg", width: 630, height: 315, alt: "Image of a Hoagian" },
-      { url: "/1024x1024.jpg", width: 1024, height: 1024, alt: "Image of a Hoagian" },
     ],
   },
   twitter: {
     card: "summary_large_image",
     site: COLLECTION_NAME.toLowerCase(), // X username
     title: COLLECTION_NAME,
-    description: COLLECTION_DESCRIPTION,
+    description: METADATA_DESCRIPTION,
     images: [
       { url: "/1200x630.jpg", width: 1200, height: 630, alt: "Image of a Hoagian" },
       { url: "/630x315.jpg", width: 630, height: 315, alt: "Image of a Hoagian" },
-      { url: "/1024x1024.jpg", width: 1024, height: 1024, alt: "Image of a Hoagian" },
     ],
   },
 };

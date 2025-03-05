@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { BASE_URL, COLLECTION_DESCRIPTION, COLLECTION_NAME } from "./lib/constants";
+import { BASE_URL, COLLECTION_NAME, METADATA_DESCRIPTION } from "./lib/constants";
 import { ICON_IMG } from "./lib/images";
 
 export default function manifest(): MetadataRoute.Manifest {
@@ -7,7 +7,7 @@ export default function manifest(): MetadataRoute.Manifest {
     lang: "en-US",
     name: COLLECTION_NAME,
     short_name: COLLECTION_NAME,
-    description: COLLECTION_DESCRIPTION,
+    description: METADATA_DESCRIPTION,
     start_url: "/",
     display: "browser",
     display_override: ["fullscreen", "standalone"],
