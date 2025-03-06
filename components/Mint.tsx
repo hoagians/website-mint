@@ -41,8 +41,11 @@ export const Mint: React.FC<MintProps> = ({ numMinted, solPrice, onNumMintedChan
   const [numMintedAssets, setNumMintedAssets] = useState<number | null>(null);
   const [spinner, setSpinner] = useState<boolean>(true);
 
+  console.log("🟡 numMinted:", numMinted);
+  console.log("🟡 solPrice:", solPrice);
+
   useEffect(() => {
-    if (!numMinted || !solPrice) return;
+    if (numMinted === null || solPrice === null) return;
     setMintPrice(solPrice);
     setNumMintedAssets(numMinted);
     setIsLoading(false);

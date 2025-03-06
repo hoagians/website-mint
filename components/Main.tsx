@@ -63,7 +63,7 @@ export const Main: React.FC = () => {
   }, [mintedAssets]);
 
   useEffect(() => {
-    if (!purchasedAssets) return;
+    if (purchasedAssets === null) return;
     const calculatePrice = (purchasedAssets: number) => {
       if (purchasedAssets < MINT_LIMIT1 && NOW < startStage2.getTime()) return PRICE1;
       if (purchasedAssets < MINT_LIMIT1 + MINT_LIMIT2 && NOW < startStage3.getTime()) return PRICE2;

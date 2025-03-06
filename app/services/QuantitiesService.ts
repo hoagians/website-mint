@@ -8,8 +8,8 @@ import { getWhitelistSize } from "../lib/prisma/Whitelist";
 
 export const getQuantities = async (): Promise<Quantities> => {
   let whitelisted = null;
-  let purchased = null;
-  let minted = null;
+  let purchased = 0;
+  let minted = 0;
 
   const NOW = Date.now();
 

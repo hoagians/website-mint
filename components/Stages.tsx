@@ -65,31 +65,31 @@ export const Stages: React.FC<StagesProps> = ({ purchasedAssets, whitelistSize }
   const NOW = Date.now();
 
   useEffect(() => {
-    if (!purchasedAssets) return;
+    if (purchasedAssets === null) return;
     setPurchased(purchasedAssets);
   }, [purchasedAssets]);
 
   useEffect(() => {
-    if (!whitelistSize) return;
+    if (whitelistSize === null) return;
     setWhitelisted(whitelistSize);
   }, [whitelistSize]);
 
   useEffect(() => {
-    if (!whitelisted) return;
+    if (whitelisted === null) return;
     const hasQuantity = whitelisted < WHITELIST_SIZE;
     const isWhitelisting = NOW < startStage1.getTime();
     setIsWhitelistingActive(hasQuantity && isWhitelisting);
   }, [whitelisted, WHITELIST_SIZE, startStage1]);
 
   useEffect(() => {
-    if (!purchased) return;
+    if (purchased === null) return;
     const hasQuantity = purchased < MINT_LIMIT1;
     const isStage1 = NOW < startStage2.getTime();
     setIsStage1Active(hasQuantity && isStage1);
   }, [purchased, MINT_LIMIT1, startStage2]);
 
   useEffect(() => {
-    if (!purchased) return;
+    if (purchased === null) return;
     const hasQuantity = purchased < MINT_LIMIT1 + MINT_LIMIT2;
     const isStage2 = NOW < startStage3.getTime();
     setIsStage2Active(hasQuantity && isStage2);

@@ -14,12 +14,12 @@ export const MintInfo: React.FC<MintInfoProps> = ({ numMinted, solPrice }) => {
   const [remaining, setRemaining] = useState<number | null>(null);
 
   useEffect(() => {
-    if (!solPrice) return;
+    if (solPrice === null) return;
     setMintPrice(solPrice);
   }, [solPrice]);
 
   useEffect(() => {
-    if (!numMinted) return;
+    if (numMinted === null) return;
     setRemaining(COLLECTION_SIZE - numMinted);
   }, [numMinted]);
 
