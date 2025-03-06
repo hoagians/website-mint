@@ -36,11 +36,10 @@ const handleJoinCommand = async (channelId: string, userId: string, walletAddres
     }
 
     const addWhitelist = await addWhitelistEntry(userId, walletAddress);
-    console.log("🟡 API Response adding whitelist entry:", addWhitelist);
 
     return handleDiscordResponse("You have been added to the whitelist!");
   } catch (error) {
-    console.error("🔴 API ERROR adding whitelist entry:\n", (error as Error).message);
+    console.error("🔴 API ERROR adding whitelist entry:", (error as Error).message);
     Sentry.captureException(error);
     return handleDiscordResponse((error as Error).message);
   }

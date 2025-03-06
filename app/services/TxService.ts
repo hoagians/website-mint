@@ -60,13 +60,8 @@ export const createAssetTx = async (owner: PublicKey, ip: string): Promise<any> 
   let id;
   let price = 0;
 
-  // console.log("🟡 assetPublicKey:", assetPublicKey);
-  // console.log("🟡 owner:", owner);
-  // console.log("🟡 ip:", ip);
-
   try {
-    console.time("⚪ Time:");
-
+    // console.time("⚪ Time:");
     const [
       fetchedCollection,
       mintedAssets,
@@ -90,17 +85,6 @@ export const createAssetTx = async (owner: PublicKey, ip: string): Promise<any> 
     const { city, country, asOrg, timezone } = locationFromIp;
     const isWhitelisted = whitelistEntry && !whitelistEntry.hasMinted;
     const isPartner = partnerStatus ? true : false;
-
-    // console.log("🟡 numMinted:", fetchedCollection.numMinted);
-    // console.log("🟡 mintedAssets:", mintedAssets);
-    // console.log("🟡 hasMinted:", hasMinted);
-    // console.log("🟡 assetId:", assetId);
-    // console.log("🟡 assetsByOwner:", assetsByOwner);
-    // console.log("🟡 whitelistEntry:", whitelistEntry);
-    // console.log("🟡 partnerStatus:", partnerStatus);
-    // console.log("🟡 isWhitelisted:", isWhitelisted);
-    // console.log("🟡 isPartner:", isPartner);
-    // console.log("🟡 locationFromIp:", locationFromIp);
 
     if (MAX_PER_WALLET <= assetsByOwner) {
       throw new Error("Minting not allowed! This wallet has reached its minting limit.");
@@ -141,13 +125,11 @@ export const createAssetTx = async (owner: PublicKey, ip: string): Promise<any> 
     };
 
     price = calculatePrice(purchasedAssets);
-    // console.log("🟡 price:", price);
 
     if (fetchedCollection.numMinted === mintedAssets) {
       // console.timeLog("⚪ Time:");
       const insertedAsset = await insertAsset(assetId, price, assetPublicKey, owner, ip, city, country, asOrg, timezone);
       id = insertedAsset.id;
-      // console.log("🟡 ID inserted:", id);
 
       const data = await getRecord(assetId);
       const hash = data?.metadata;
@@ -222,7 +204,7 @@ export const createAssetTx = async (owner: PublicKey, ip: string): Promise<any> 
       throw new Error("Network busy! Please try again shortly.");
     }
   } catch (error) {
-    // console.error("🔴 Service ERROR getting tx:", (error as Error).message);
+    console.error("🔴 Service ERROR getting tx:", (error as Error).message);
     Sentry.captureException(error);
 
     if (error instanceof Error && (error.message.includes("wallet") || error.message.includes("busy"))) {
@@ -231,6 +213,6 @@ export const createAssetTx = async (owner: PublicKey, ip: string): Promise<any> 
       throw new Error("Server error. Please try again later.");
     }
   } finally {
-    console.timeEnd("⚪ Time:");
+    // console.timeEnd("⚪ Time:");
   }
 };

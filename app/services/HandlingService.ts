@@ -13,7 +13,7 @@ const DISCORD_MINTING_URL = String(process.env.DISCORD_MINTING_URL);
 export const deleteAssetId = async (id: number): Promise<void> => {
   try {
     const deletedAsset = await deleteAsset(id);
-    console.log("🟡 API Response deleting asset:", deletedAsset);
+    // console.log("🟡 API Response deleting asset:", deletedAsset);
   } catch (error) {
     console.error("🔴 Service ERROR deleting asset:", (error as Error).message);
     Sentry.captureException(error);
@@ -64,7 +64,7 @@ export const actionsAfterMint = async ({ assetId, asset, owner, isWhitelisted, i
     const { status, statusText } = response;
     // console.log("🟡 Service Response handling success [postDiscord]:", { status, statusText });
   } catch (error) {
-    // console.error("🔴 Service Error handling success [postDiscord]:", (error as Error).message);
+    console.error("🔴 Service Error handling success [postDiscord]:", (error as Error).message);
     Sentry.captureException(error);
   }
 
@@ -73,7 +73,7 @@ export const actionsAfterMint = async ({ assetId, asset, owner, isWhitelisted, i
       const response = await updateWhitelistEntry(owner);
       // console.log("🟡 Service Response handling success [updateWhitelistEntry]:", response);
     } catch (error) {
-      // console.error("🔴 Service Error handling success [updateWhitelistEntry]:", (error as Error).message);
+      console.error("🔴 Service Error handling success [updateWhitelistEntry]:", (error as Error).message);
       Sentry.captureException(error);
     }
   }
@@ -83,7 +83,7 @@ export const actionsAfterMint = async ({ assetId, asset, owner, isWhitelisted, i
       const response = await updatePartnerStatus(owner);
       // console.log("🟡 Service Response handling success [updatePartnerStatus]:", response);
     } catch (error) {
-      // console.error("🔴 Service Error handling success [updatePartnerStatus]:", (error as Error).message);
+      console.error("🔴 Service Error handling success [updatePartnerStatus]:", (error as Error).message);
       Sentry.captureException(error);
     }
   }

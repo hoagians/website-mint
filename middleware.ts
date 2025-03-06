@@ -47,7 +47,7 @@ export async function middleware(request: NextRequest) {
 
         return NextResponse.json({ type: InteractionResponseType.PONG });
       } catch (error) {
-        // console.error("🔴 ERROR while verifying Discord Bot request:", (error as Error).message);
+        console.error("🔴 ERROR while verifying Discord Bot request:", (error as Error).message);
         Sentry.captureException((error as Error).message);
         return NextResponse.json({
           type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
@@ -73,7 +73,7 @@ export async function middleware(request: NextRequest) {
 
         return NextResponse.next();
       } catch (error) {
-        // console.error("🔴 ERROR while verifying Discord App request:", (error as Error).message);
+        console.error("🔴 ERROR while verifying Discord App request:", (error as Error).message);
         Sentry.captureException((error as Error).message);
         return NextResponse.json({
           type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,

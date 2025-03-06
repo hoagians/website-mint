@@ -29,7 +29,7 @@ export const getQuantities = async (): Promise<Quantities> => {
       // console.log("🟡 Service Response fetching quantity [getMintedAssets]:", minted);
     }
   } catch (error) {
-    // console.error("🔴 Service Response fetching quantity:", (error as Error).message);
+    console.error("🔴 Service Response fetching quantity:", (error as Error).message);
     Sentry.captureException(error);
     throw new Error("Server error. Please try again later.");
   }

@@ -103,7 +103,6 @@ export const Main: React.FC = () => {
             {activeTab === "stages" && <Stages purchasedAssets={purchasedAssets} whitelistSize={whitelistSize} />}
             {activeTab === "links" && <Links />}
           </div>
-          {/* <footer className="footer">© {new Date().getFullYear()} Hoagians</footer> */}
         </div>
       </div>
     </main>

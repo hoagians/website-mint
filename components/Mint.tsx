@@ -41,9 +41,6 @@ export const Mint: React.FC<MintProps> = ({ numMinted, solPrice, onNumMintedChan
   const [numMintedAssets, setNumMintedAssets] = useState<number | null>(null);
   const [spinner, setSpinner] = useState<boolean>(true);
 
-  console.log("🟡 numMinted:", numMinted);
-  console.log("🟡 solPrice:", solPrice);
-
   useEffect(() => {
     if (numMinted === null || solPrice === null) return;
     setMintPrice(solPrice);
@@ -94,7 +91,6 @@ export const Mint: React.FC<MintProps> = ({ numMinted, solPrice, onNumMintedChan
 
   const handleMintError = useCallback(async (error: Error | string, id?: number) => {
     setFormMessage(typeof error === "string" ? error : error.message);
-    // console.log("🔴 ERROR minting asset:", typeof error === "string" ? error : error.message);
 
     setTimeout(() => setFormMessage(null), 30000);
 
@@ -122,7 +118,6 @@ export const Mint: React.FC<MintProps> = ({ numMinted, solPrice, onNumMintedChan
 
       const response = await fetch("https://api.ipify.org?format=json");
       const data = await response.json();
-      // console.log("🟡 Seu IP é:", data.ip);
 
       const { id, assetPublicKey, price, isWhitelisted, isPartner, serializedTxAsString, error } = await createAssetTx(
         umi.identity.publicKey,
@@ -130,12 +125,6 @@ export const Mint: React.FC<MintProps> = ({ numMinted, solPrice, onNumMintedChan
       );
 
       assetId = id;
-
-      // console.log("🟡 assetId:", assetId);
-      // console.log("🟡 assetPublicKey:", assetPublicKey);
-      // console.log("🟡 price:", price);
-      // console.log("🟡 isWhitelisted:", isWhitelisted);
-      // console.log("🟡 isPartner:", isPartner);
 
       if (error) throw new Error(error);
       if (price === 0) setMintPrice(price);
@@ -155,7 +144,7 @@ export const Mint: React.FC<MintProps> = ({ numMinted, solPrice, onNumMintedChan
       const signedTransactionWithTimeout = async (tx: Transaction) => {
         return await Promise.race([umi.identity.signTransaction(tx), timeout(tx)]);
       };
-      // console.timeLog("⚪ Time:");
+
       const signedDeserializedTx = await signedTransactionWithTimeout(deserializedTx);
       if (!signedDeserializedTx) throw new Error("Transaction failed! Please try again.");
       // console.timeLog("⚪ Time:");

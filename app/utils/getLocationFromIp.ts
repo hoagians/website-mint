@@ -19,7 +19,7 @@ export const getLocationFromIp = async (ip: string): Promise<CustomLocation> => 
     // console.log("🟡 Response fetching location:", { city, country, asOrg, timezone });
     return { city, country, asOrg, timezone };
   } catch (error) {
-    // console.error("🔴 API ERROR fetching location:", (error as Error).message);
+    console.error("🔴 API ERROR fetching location:", (error as Error).message);
     Sentry.captureException(error);
     return { city: "N/A", country: "N/A", asOrg: "N/A", timezone: "N/A" };
   }
