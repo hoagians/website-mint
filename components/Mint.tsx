@@ -92,7 +92,7 @@ export const Mint: React.FC<MintProps> = ({ numMinted, solPrice, onNumMintedChan
   const handleMintError = useCallback(async (error: Error | string, id?: number) => {
     setFormMessage(typeof error === "string" ? error : error.message);
 
-    setTimeout(() => setFormMessage(null), 30000);
+    setTimeout(() => setFormMessage(null), 20000);
 
     try {
       if (typeof id === "number") await deleteAssetId(id);
@@ -138,7 +138,7 @@ export const Mint: React.FC<MintProps> = ({ numMinted, solPrice, onNumMintedChan
       // Sign the Transaction with the Keypair that we got from the walletAdapter
       const timeout = (tx: Transaction) => {
         return new Promise<void>((_, reject) => {
-          setTimeout(() => reject("Transaction expired! Please try again."), 10000);
+          setTimeout(() => reject("Transaction expired! Please try again."), 20000);
         });
       };
       const signedTransactionWithTimeout = async (tx: Transaction) => {
