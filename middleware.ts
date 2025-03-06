@@ -36,37 +36,54 @@ export async function middleware(request: NextRequest) {
     const signature = request.headers.get("x-signature-ed25519") || "";
     const timestamp = request.headers.get("x-signature-timestamp") || "";
     const requestText = await request.text();
-    const { member, type } = JSON.parse(requestText);
-    const { id: userId } = member.user;
+    const data = JSON.parse(requestText);
+    const { type } = data;
 
-    const token = tokenCache.get(userId) ?? 0;
-    // console.log("⚪ tokenBefore discord:", token);
+    if (type === InteractionType.PING) {
+      try {
+        const isValidRequest = await verifyKey(requestText, signature, timestamp, DISCORD_PUBLIC_KEY);
 
-    try {
-      if (RATE_LIMIT <= token)
-        throw new Error("You have sent too many requests in a short time. You has been temporarily blocked.");
+        if (!isValidRequest) throw new Error("Invalid request.");
 
-      const isValidRequest = await verifyKey(requestText, signature, timestamp, DISCORD_PUBLIC_KEY);
-      // console.log("🟡 Discord request is valid:", isValidRequest);
-
-      if (!isValidRequest) throw new Error("Invalid request.");
-
-      if (type === InteractionType.PING) {
         return NextResponse.json({ type: InteractionResponseType.PONG });
+      } catch (error) {
+        // console.error("🔴 ERROR while verifying Discord Bot request:", (error as Error).message);
+        Sentry.captureException((error as Error).message);
+        return NextResponse.json({
+          type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+          data: { content: (error as Error).message },
+        });
       }
+    }
 
-      return NextResponse.next();
-    } catch (error) {
-      // console.error("🔴 ERROR verifying Discord request:", (error as Error).message);
-      Sentry.captureException((error as Error).message);
-      return NextResponse.json({
-        type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-        data: { content: (error as Error).message },
-      });
-    } finally {
-      tokenCache.set(userId, token + 1);
-      // const tokenAfter = tokenCache.get(userId) ?? 0;
-      // console.log("⚪ tokenAfter discord:", tokenAfter);
+    if (type === InteractionType.APPLICATION_COMMAND) {
+      const { member } = data;
+      const { id: userId } = member.user;
+
+      const token = tokenCache.get(userId) ?? 0;
+      // console.log("⚪ tokenBefore discord:", token);
+
+      try {
+        if (RATE_LIMIT <= token)
+          throw new Error("You have sent too many requests in a short time. You has been temporarily blocked.");
+
+        const isValidRequest = await verifyKey(requestText, signature, timestamp, DISCORD_PUBLIC_KEY);
+
+        if (!isValidRequest) throw new Error("Invalid request.");
+
+        return NextResponse.next();
+      } catch (error) {
+        // console.error("🔴 ERROR while verifying Discord App request:", (error as Error).message);
+        Sentry.captureException((error as Error).message);
+        return NextResponse.json({
+          type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+          data: { content: (error as Error).message },
+        });
+      } finally {
+        tokenCache.set(userId, token + 1);
+        // const tokenAfter = tokenCache.get(userId) ?? 0;
+        // console.log("⚪ tokenAfter discord:", tokenAfter);
+      }
     }
   }
 }
