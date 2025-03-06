@@ -41,7 +41,7 @@ import { Base64 } from "js-base64";
 import { getPartnerStatus } from "../lib/prisma/Partners";
 import { getRecord } from "../lib/prisma/Records";
 import { getWhitelistEntry } from "../lib/prisma/Whitelist";
-import { getIpLocation } from "../utils/getIpLocation";
+import { getLocationFromIp } from "../utils/getLocationFromIp";
 
 const NOW = Date.now();
 
@@ -84,7 +84,7 @@ export const createAssetTx = async (owner: PublicKey, ip: string): Promise<any> 
       getAssetsByOwner(owner),
       getWhitelistEntry(owner),
       getPartnerStatus(owner),
-      getIpLocation(ip),
+      getLocationFromIp(ip),
     ]);
 
     const { city, country, asOrg, timezone } = locationFromIp;

@@ -19,7 +19,6 @@
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
     "@libsql/client": "^0.8.0",
-    "@maxmind/geoip2-node": "^5.0.0",
     "@metaplex-foundation/mpl-core": "^1.1.1",
     "@metaplex-foundation/mpl-toolbox": "^0.9.4",
     "@metaplex-foundation/umi": "^0.9.2",
