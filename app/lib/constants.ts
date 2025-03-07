@@ -47,8 +47,8 @@ export const SNIPER_URL = "https://www.sniper.xyz/";
 export const TENSOR_URL = "https://tensor.trade/";
 
 // Tooltips
-export const TOOLTIP_FEES = `This includes the Solana rental cost, the token metadata fee, and the transaction fee to create a new NFT.`;
-export const TOOLTIP_WL = `At this stage, up to ${WHITELIST_SIZE} wallets can register for the whitelist to mint 1 NFT for free when sales open. Use Discord to join the whitelist!`;
+export const TOOLTIP_FEES = `This includes Solana rent, token metadata fees, and NFT creation transaction fees.`;
+export const TOOLTIP_WL = `At this stage, up to ${WHITELIST_SIZE} wallets can secure a spot on the whitelist to mint 1 NFT for free when sales open. Use our Discord to join the whitelist.`;
 export const TOOLTIP_STAGE1 = `At this stage, up to ${MINT_LIMIT1} NFTs can be minted for ${PRICE1} SOL with a limit of ${MAX_PER_WALLET} per wallet.`;
 export const TOOLTIP_STAGE2 = `At this stage, up to ${MINT_LIMIT2} NFTs can be minted for ${PRICE2} SOL with a limit of ${MAX_PER_WALLET} per wallet.`;
 export const TOOLTIP_STAGE3 = `At this stage, the NFTs can be minted for ${PRICE3} SOL with a limit of ${MAX_PER_WALLET} per wallet.`;
