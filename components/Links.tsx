@@ -45,7 +45,7 @@ export const Links: React.FC = () => {
     () => [
       { href: DISCORD_URL, src: DISCORD_IMG, alt: "Link to Discord", title: "View on Discord", size: 17 },
       { href: FACEBOOK_URL, src: FACEBOOK_IMG, alt: "Link to Facebook", title: "View on Facebook", size: 17 },
-      { href: INSTAGRAM_URL, src: INSTAGRAM_IMG, alt: "Link to Instagram", title: "View on Instagram", size: 15 },
+      // { href: INSTAGRAM_URL, src: INSTAGRAM_IMG, alt: "Link to Instagram", title: "View on Instagram", size: 15 },
       { href: X_URL, src: X_IMG, alt: "Link to X", title: "View on X", size: 12 },
     ],
     []
