@@ -92,7 +92,7 @@ export const Mint: React.FC<MintProps> = ({ numMinted, solPrice, onNumMintedChan
   const handleMintError = useCallback(async (error: Error | string, id?: number) => {
     setFormMessage(typeof error === "string" ? error : error.message);
 
-    setTimeout(() => setFormMessage(null), 20000);
+    setTimeout(() => setFormMessage(null), 15000);
 
     try {
       if (typeof id === "number") await deleteAssetId(id);
