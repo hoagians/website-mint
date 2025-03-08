@@ -1,6 +1,7 @@
 import { BASE_URL, COLLECTION_NAME, METADATA_DESCRIPTION } from "@/app/lib/constants";
 import { ICON_IMG } from "@/app/lib/images";
 import { GoogleTagManager } from "@next/third-parties/google";
+import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata, Viewport } from "next";
 import { BackgroundEffect } from "../components/BackgroundEffect";
@@ -63,6 +64,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <BackgroundEffect />
         <WalletProviderApp>{children}</WalletProviderApp>
         <SpeedInsights />
+        <Analytics />
       </body>
     </html>
   );
