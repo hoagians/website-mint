@@ -7,7 +7,7 @@ import { getMintedAssets, getPurchasedAssets } from "../lib/prisma/Assets";
 import { getWhitelistSize } from "../lib/prisma/Whitelist";
 
 export const getQuantities = async (): Promise<Quantities> => {
-  let whitelisted = null;
+  let whitelisted = 0;
   let purchased = 0;
   let minted = 0;
 
