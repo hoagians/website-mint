@@ -1,4 +1,4 @@
-import { BASE_URL, COLLECTION_NAME, FB_APP_ID, GTM_ID, METADATA_DESCRIPTION } from "@/app/lib/constants";
+import { BASE_URL, COLLECTION_NAME, FB_APP_ID, GTM_ID, METADATA_DESCRIPTION, METADATA_TITLE } from "@/app/lib/constants";
 import { ICON_IMG } from "@/app/lib/images";
 import { GoogleTagManager } from "@next/third-parties/google";
 import { Analytics } from "@vercel/analytics/next";
@@ -9,7 +9,7 @@ import WalletProviderApp from "../components/WalletProviderApp";
 import "../styles/globals.css";
 
 export const metadata: Metadata = {
-  title: COLLECTION_NAME,
+  title: METADATA_TITLE,
   description: METADATA_DESCRIPTION,
   metadataBase: new URL(BASE_URL),
   icons: {
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
     locale: "en_US",
     type: "website",
     siteName: COLLECTION_NAME,
-    title: COLLECTION_NAME,
+    title: METADATA_TITLE,
     description: METADATA_DESCRIPTION,
     url: BASE_URL,
     images: [
@@ -32,7 +32,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     site: COLLECTION_NAME.toLowerCase(), // X username
-    title: COLLECTION_NAME,
+    title: METADATA_TITLE,
     description: METADATA_DESCRIPTION,
     images: [
       { url: "/1200x630.jpg", width: 1200, height: 630, alt: "Image of a Hoagian" },
