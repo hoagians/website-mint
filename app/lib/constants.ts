@@ -32,7 +32,7 @@ export const PRICE3 = 0.03;
 // Dates
 export const endWhitelist = new Date(Date.UTC(2025, 2, 10));
 export const startStage1 = new Date(Date.UTC(2025, 2, 11, 0, 0, 0, 0));
-export const daysAfter = 10; // number of days after launch
+export const daysAfter = 15; // number of days after launch
 export const endStage1 = new Date(Date.UTC(2025, 2, 17));
 export const startStage2 = new Date(Date.UTC(2025, 2, 18));
 export const endStage2 = new Date(Date.UTC(2025, 2, 24));
