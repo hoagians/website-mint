@@ -10,7 +10,7 @@ import * as Sentry from "@sentry/nextjs";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import { addMinutes, isWithinInterval, subMinutes } from "date-fns";
 import React, { useCallback, useEffect, useState } from "react";
-import { CREATOR1, startStage1, startStage2, startStage3 } from "../app/lib/constants";
+import { startStage1, startStage2, startStage3 } from "../app/lib/constants";
 import { MintProps } from "../app/lib/interfaces";
 import { actionsAfterMint, deleteAssetId } from "../app/services/HandlingService";
 import { createAssetTx } from "../app/services/TxService";
@@ -113,7 +113,8 @@ export const Mint: React.FC<MintProps> = ({ numMinted, solPrice, onNumMintedChan
       if (!publicKey) throw new Error("Wallet not connected!");
       umi.use(walletAdapterIdentity(walletAdapter, true));
 
-      if (umi.identity.publicKey !== CREATOR1) throw new Error("Minting not allowed! Please wait, under construction.");
+      if (umi.identity.publicKey !== "8ED1PeAofebXhB3Qgpi9A1Ev7oWES743YvhV54Limjvc")
+        throw new Error("Minting not allowed! Please wait, under construction.");
 
       // const solBalance = await connection.getBalance(publicKey).then((balance) => balance / 1e9);
       // if (solBalance < solPrice!) throw new Error("Insufficient balance!");
