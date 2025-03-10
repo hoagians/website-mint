@@ -1,7 +1,6 @@
 "use client";
 
 import { mplCore } from "@metaplex-foundation/mpl-core";
-import { Transaction } from "@metaplex-foundation/umi";
 import { createUmi } from "@metaplex-foundation/umi-bundle-defaults";
 import { walletAdapterIdentity } from "@metaplex-foundation/umi-signer-wallet-adapters";
 import { base64 } from "@metaplex-foundation/umi/serializers";
@@ -63,7 +62,7 @@ export const Mint: React.FC<MintProps> = ({ numMinted, solPrice, onNumMintedChan
         </span>
       );
 
-      setTimeout(() => setFormMessage(null), 10000);
+      setTimeout(() => setFormMessage(null), 14000);
 
       try {
         await actionsAfterMint({ assetId, asset, owner, isWhitelisted, isPartner });
@@ -92,7 +91,7 @@ export const Mint: React.FC<MintProps> = ({ numMinted, solPrice, onNumMintedChan
   const handleMintError = useCallback(async (error: Error | string, id?: number) => {
     setFormMessage(typeof error === "string" ? error : error.message);
 
-    setTimeout(() => setFormMessage(null), 15000);
+    setTimeout(() => setFormMessage(null), 8000);
 
     try {
       if (typeof id === "number") await deleteAssetId(id);
@@ -108,8 +107,9 @@ export const Mint: React.FC<MintProps> = ({ numMinted, solPrice, onNumMintedChan
     let anyError = null;
 
     try {
-      setSpinner(true);
       // console.time("⚪ Time:");
+      setSpinner(true);
+
       if (!publicKey) throw new Error("Wallet not connected!");
       umi.use(walletAdapterIdentity(walletAdapter, true));
 
@@ -138,27 +138,19 @@ export const Mint: React.FC<MintProps> = ({ numMinted, solPrice, onNumMintedChan
       // Deserialize the Transaction returned by the Backend
       const deserializedTx = umi.transactions.deserialize(deserializedTxAsU8);
 
-      // Sign the Transaction with the Keypair that we got from the walletAdapter
-      const timeout = (tx: Transaction) => {
+      const timeout = () => {
         return new Promise<void>((_, reject) => {
           setTimeout(() => reject("Transaction expired! Please try again."), 20000);
         });
       };
-      const signedTransactionWithTimeout = async (tx: Transaction) => {
-        return await Promise.race([umi.identity.signTransaction(tx), timeout(tx)]);
-      };
 
-      const signedDeserializedTx = await signedTransactionWithTimeout(deserializedTx);
-      if (!signedDeserializedTx) throw new Error("Transaction failed! Please try again.");
-      // console.timeLog("⚪ Time:");
+      // Sign the Transaction with timout
+      const signedTx = await Promise.race([umi.identity.signTransaction(deserializedTx), timeout()]);
+      if (!signedTx) throw new Error("Transaction signing failed! Please try again.");
 
       // Send the Transaction to the Solana Network
-      const signature = await umi.rpc.sendTransaction(signedDeserializedTx);
-
-      // Confirm the Transaction on the Solana Network
-      const result = await umi.rpc.confirmTransaction(signature, {
-        strategy: { type: "blockhash", ...(await umi.rpc.getLatestBlockhash()) },
-      });
+      const txSignature = await umi.rpc.sendTransaction(signedTx);
+      if (!txSignature) throw new Error("Transaction failed! Please try again.");
 
       handleMintSuccess(assetId, assetPublicKey, publicKey.toString(), isWhitelisted, isPartner, price);
     } catch (error) {
