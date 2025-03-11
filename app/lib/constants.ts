@@ -31,8 +31,8 @@ export const PRICE2 = 0.02;
 export const PRICE3 = 0.03;
 
 // Dates
-export const endWhitelist = new Date(Date.UTC(2025, 2, 12));
-export const startStage1 = new Date(Date.UTC(2025, 2, 13, 0, 0, 0, 0));
+export const endWhitelist = new Date(Date.UTC(2025, 2, 10));
+export const startStage1 = new Date(Date.UTC(2025, 2, 11, 0, 0, 0, 0));
 export const daysAfter = 15; // number of days after launch
 export const endStage1 = new Date(Date.UTC(2025, 2, 19));
 export const startStage2 = new Date(Date.UTC(2025, 2, 20));
@@ -46,7 +46,7 @@ export const INSTAGRAM_URL = "https://www.instagram.com/";
 export const X_URL = "https://x.com/";
 
 // Marketplaces
-export const MAGICEDEN_URL = "https://magiceden.io/";
+export const MAGICEDEN_URL = "https://magiceden.io/marketplace/hoagians";
 export const OKX_URL = "https://www.okx.com/";
 export const SNIPER_URL = "https://www.sniper.xyz/";
 export const TENSOR_URL = "https://tensor.trade/";
