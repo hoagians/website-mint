@@ -59,7 +59,6 @@ const jsonLd = {
   description: METADATA_DESCRIPTION,
   url: BASE_URL,
   image: `${BASE_URL}/hoagians.png`,
-  logo: `${BASE_URL}/hoagians.png`,
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
