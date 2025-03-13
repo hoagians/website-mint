@@ -1,9 +1,9 @@
 import { BASE_URL, COLLECTION_NAME, FB_APP_ID, GTM_ID, METADATA_DESCRIPTION, METADATA_TITLE } from "@/app/lib/constants";
-import { ICON_IMG } from "@/app/lib/images";
 import { GoogleTagManager } from "@next/third-parties/google";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata, Viewport } from "next";
+import Script from "next/script";
 import { BackgroundEffect } from "../components/BackgroundEffect";
 import WalletProviderApp from "../components/WalletProviderApp";
 import "../styles/globals.css";
@@ -13,8 +13,8 @@ export const metadata: Metadata = {
   description: METADATA_DESCRIPTION,
   metadataBase: new URL(BASE_URL),
   icons: {
-    icon: [{ url: ICON_IMG, sizes: "512x512", type: "image/svg+xml", rel: "icon", fetchPriority: "high" }],
-    shortcut: [{ url: ICON_IMG, sizes: "512x512", type: "image/svg+xml", rel: "shortcut icon" }],
+    icon: [{ url: "/hoagians.png", sizes: "512x512", type: "image/png", rel: "icon", fetchPriority: "high" }],
+    shortcut: [{ url: "/hoagians.png", sizes: "512x512", type: "image/png", rel: "shortcut icon" }],
     apple: [{ url: "/apple.png", sizes: "512x512", type: "image/png", rel: "apple-touch-icon" }],
   },
   openGraph: {
@@ -52,10 +52,21 @@ export const viewport: Viewport = {
   interactiveWidget: "resizes-visual",
 };
 
+const jsonLd = {
+  "@context": "https://schema.org/",
+  "@type": "WebSite",
+  name: COLLECTION_NAME,
+  description: METADATA_DESCRIPTION,
+  url: BASE_URL,
+  image: `${BASE_URL}/hoagians.png`,
+  logo: `${BASE_URL}/hoagians.png`,
+};
+
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
       <GoogleTagManager gtmId={GTM_ID} />
+      <Script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <meta property="fb:app_id" content={FB_APP_ID} />
       <body>
         <BackgroundEffect />
