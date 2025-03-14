@@ -31,13 +31,13 @@ export const PRICE2 = 0.02;
 export const PRICE3 = 0.03;
 
 // Dates
-export const endWhitelist = new Date(Date.UTC(2025, 2, 12));
-export const startStage1 = new Date(Date.UTC(2025, 2, 13, 0, 0, 0, 0));
+export const endWhitelist = new Date(Date.UTC(2025, 2, 15));
+export const startStage1 = new Date(Date.UTC(2025, 2, 16, 0, 0, 0, 0));
 export const daysAfter = 15; // number of days after launch
-export const endStage1 = new Date(Date.UTC(2025, 2, 21));
-export const startStage2 = new Date(Date.UTC(2025, 2, 22));
-export const endStage2 = new Date(Date.UTC(2025, 2, 28));
-export const startStage3 = new Date(Date.UTC(2025, 2, 29));
+export const endStage1 = new Date(Date.UTC(2025, 2, 22));
+export const startStage2 = new Date(Date.UTC(2025, 2, 23));
+export const endStage2 = new Date(Date.UTC(2025, 2, 29));
+export const startStage3 = new Date(Date.UTC(2025, 2, 30));
 
 // Social media
 export const DISCORD_URL = "https://discord.com/";
