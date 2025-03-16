@@ -2,13 +2,7 @@
 
 import { ConnectionProvider, WalletProvider } from "@solana/wallet-adapter-react";
 import { WalletModalProvider } from "@solana/wallet-adapter-react-ui";
-import {
-  LedgerWalletAdapter,
-  PhantomWalletAdapter,
-  SolflareWalletAdapter,
-  TorusWalletAdapter,
-  TrezorWalletAdapter,
-} from "@solana/wallet-adapter-wallets";
+import { PhantomWalletAdapter, SolflareWalletAdapter } from "@solana/wallet-adapter-wallets";
 import React, { useMemo } from "react";
 import { RPC_URL } from "../app/lib/constants";
 import "../styles/styles.css";
@@ -24,9 +18,6 @@ export default function WalletProviderApp({ children }: { children: React.ReactN
 
     if (new SolflareWalletAdapter().readyState !== "Installed") walletsAdapter.push(new SolflareWalletAdapter());
     if (new PhantomWalletAdapter().readyState !== "Installed") walletsAdapter.push(new PhantomWalletAdapter());
-    walletsAdapter.push(new LedgerWalletAdapter());
-    walletsAdapter.push(new TorusWalletAdapter());
-    walletsAdapter.push(new TrezorWalletAdapter());
 
     return walletsAdapter;
   }, []);
