@@ -73,8 +73,9 @@
   opacity: 0;
   padding: 10px;
   position: absolute;
-  right: 0;
-  top: 100%;
+  right: -10px;
+  /* top: 0; */
+  bottom: 0;
   transition:
     opacity 200ms ease,
     transform 200ms ease,
