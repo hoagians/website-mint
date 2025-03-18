@@ -51,4 +51,6 @@ model Records {
 model Availability {
   id        Int     @id @default(autoincrement())
   available Boolean @default(true)
+
+  @@index([available])
 }
