@@ -1,20 +1,23 @@
 import prisma from "../prisma";
 
 export const getLowestAvailableId = async () => {
-  const result = await prisma.$queryRaw<{ id: number }[]>`
-      UPDATE Availability
-      SET available = false
-      WHERE id = (
-        SELECT id
-        FROM Availability
-        WHERE available = true
-        ORDER BY id ASC
-        LIMIT 1
-      )
-      RETURNING id;
-    `;
+  return await prisma.$transaction(async (prisma) => {
+    const availability = await prisma.availability.findFirst({
+      where: { available: true },
+      orderBy: { id: "asc" },
+    });
 
-  return (result[0] as { id: number }).id;
+    if (!availability) throw new Error("No available ID found");
+
+    const id = availability.id;
+
+    const result = await prisma.availability.update({
+      where: { id },
+      data: { available: false },
+    });
+
+    return result.id;
+  });
 };
 
 export const updateAvailableId = async (id: number) => {
