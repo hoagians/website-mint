@@ -56,7 +56,6 @@ export const createAssetTx = async (owner: PublicKey, ip: string): Promise<any> 
   let id;
 
   try {
-    // console.time("⚪ Time:");
     const [assetId, purchasedAssets, assetsByOwner, whitelistEntry, partnerStatus, locationFromIp, fetchedCollection] =
       await Promise.all([
         getLowestAvailableId(),
@@ -67,7 +66,6 @@ export const createAssetTx = async (owner: PublicKey, ip: string): Promise<any> 
         getLocationFromIp(ip),
         fetchCollection(umi, COLLECTION),
       ]);
-    // console.timeLog("⚪ Time:");
 
     id = assetId;
     const { city, country, asOrg, timezone } = locationFromIp;
@@ -172,7 +170,5 @@ export const createAssetTx = async (owner: PublicKey, ip: string): Promise<any> 
     Sentry.captureException(error);
 
     return { id, error: error instanceof Error ? (error as Error).message : "Server error. Please try again later." };
-  } finally {
-    // console.timeEnd("⚪ Time:");
   }
 };
