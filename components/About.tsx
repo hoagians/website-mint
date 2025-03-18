@@ -3,8 +3,14 @@
 import { Tooltip } from "@chakra-ui/react";
 import Link from "next/link";
 import { COLLECTION, COLLECTION_DESCRIPTION } from "../app/lib/constants";
-import { getExplorerUrl, transformString } from "../app/utils/helpers";
+import { getExplorerUrl } from "../app/lib/utils/getExplorerUrl";
 import styles from "../styles/about.module.css";
+
+const transformString = (input: string): string => {
+  const start = input.substring(0, 4);
+  const end = input.substring(input.length - 4);
+  return `${start}...${end}`;
+};
 
 export const About: React.FC = () => {
   const explorerUrl = getExplorerUrl(COLLECTION);

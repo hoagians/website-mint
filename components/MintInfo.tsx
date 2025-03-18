@@ -6,7 +6,7 @@ import React, { useEffect, useState } from "react";
 import { COLLECTION_SIZE, FEES, TOOLTIP_FEES } from "../app/lib/constants";
 import { ACTIVE_INFO_IMG } from "../app/lib/images";
 import { MintInfoProps } from "../app/lib/interfaces";
-import { getSolanaPrice } from "../app/utils/getSolanaPrice";
+import { getSolanaPrice } from "../app/lib/utils/getSolanaPrice";
 import styles from "../styles/mint.module.css";
 
 export const MintInfo: React.FC<MintInfoProps> = ({ numMinted, solPrice }) => {

@@ -16,8 +16,8 @@ export default function WalletProviderApp({ children }: { children: React.ReactN
   const wallets = useMemo(() => {
     const walletsAdapter = [];
 
-    if (new SolflareWalletAdapter().readyState !== "Installed") walletsAdapter.push(new SolflareWalletAdapter());
     if (new PhantomWalletAdapter().readyState !== "Installed") walletsAdapter.push(new PhantomWalletAdapter());
+    // if (new SolflareWalletAdapter().readyState !== "Installed") walletsAdapter.push(new SolflareWalletAdapter());
 
     return walletsAdapter;
   }, []);

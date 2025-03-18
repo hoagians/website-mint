@@ -11,9 +11,10 @@ import { addMinutes, isWithinInterval, subMinutes } from "date-fns";
 import React, { useCallback, useEffect, useState } from "react";
 import { startStage1, startStage2, startStage3 } from "../app/lib/constants";
 import { MintProps } from "../app/lib/interfaces";
-import { actionsAfterMint, deleteAssetId } from "../app/services/ServiceAfterMint";
+import { getExplorerUrl } from "../app/lib/utils/getExplorerUrl";
+import { actionsAfterError } from "../app/services/ServiceAfterError";
+import { actionsAfterMint } from "../app/services/ServiceAfterMint";
 import { createAssetTx } from "../app/services/TxBuilderService";
-import { getExplorerUrl } from "../app/utils/helpers";
 import styles from "../styles/mint.module.css";
 import { Countdown } from "./Countdown";
 import { MintInfo } from "./MintInfo";
@@ -94,7 +95,7 @@ export const Mint: React.FC<MintProps> = ({ numMinted, solPrice, onNumMintedChan
     setTimeout(() => setFormMessage(null), 8000);
 
     try {
-      if (typeof id === "number") await deleteAssetId(id);
+      if (typeof id === "number") await actionsAfterError(id);
     } catch (error) {
       Sentry.captureException(error);
     }
@@ -113,11 +114,11 @@ export const Mint: React.FC<MintProps> = ({ numMinted, solPrice, onNumMintedChan
       if (!publicKey) throw new Error("Wallet not connected!");
       umi.use(walletAdapterIdentity(walletAdapter, true));
 
-      if (umi.identity.publicKey !== "8ED1PeAofebXhB3Qgpi9A1Ev7oWES743YvhV54Limjvc")
-        throw new Error("Minting not allowed! Please wait, under construction.");
+      // if (umi.identity.publicKey !== String(process.env.NEXT_PUBLIC_AUTHORITY))
+      //   throw new Error("Minting not allowed! Please wait, under construction.");
 
       const solBalance = await connection.getBalance(publicKey).then((balance) => balance / 1e9);
-      if (solBalance < solPrice!) throw new Error("Insufficient balance!");
+      if (solPrice && solBalance < solPrice) throw new Error("Insufficient balance!");
 
       const response = await fetch("https://api.ipify.org?format=json");
       const data = await response.json();
@@ -140,7 +141,7 @@ export const Mint: React.FC<MintProps> = ({ numMinted, solPrice, onNumMintedChan
 
       const timeout = () => {
         return new Promise<void>((_, reject) => {
-          setTimeout(() => reject("Transaction expired! Please try again."), 20000);
+          setTimeout(() => reject("Transaction expired! Please try again."), 30000);
         });
       };
 
