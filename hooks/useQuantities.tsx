@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { getQuantities } from "../app/services/QuantitiesService";
+import { getQuantities } from "../app/services/CountingService";
 
 export const useQuantities = () => {
   const [mintedAssets, setMintedAssets] = useState<number | null>(null);

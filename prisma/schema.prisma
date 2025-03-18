@@ -42,18 +42,13 @@ model Partners {
   updatedAt     DateTime  @updatedAt
 }
 
-model Blocked {
-  id          Int       @id @default(autoincrement())
-  ipAddress   String?
-  city        String?
-  country     String?
-  asOrg       String?
-  timezone    String?
-  createdAt   DateTime  @default(now())  
-}
-
 model Records {
   id        Int    @id @default(autoincrement())
   metadata  String
   image     String
+}
+
+model Availability {
+  id        Int     @id @default(autoincrement())
+  available Boolean @default(true)
 }

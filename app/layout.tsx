@@ -1,4 +1,4 @@
-import { BASE_URL, COLLECTION_NAME, FB_APP_ID, GTM_ID, METADATA_DESCRIPTION, METADATA_TITLE } from "@/app/lib/constants";
+import { BASE_URL, COLLECTION_NAME, METADATA_DESCRIPTION, METADATA_TITLE } from "@/app/lib/constants";
 import { GoogleTagManager } from "@next/third-parties/google";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
@@ -7,6 +7,9 @@ import Script from "next/script";
 import { BackgroundEffect } from "../components/BackgroundEffect";
 import WalletProviderApp from "../components/WalletProviderApp";
 import "../styles/globals.css";
+
+const FB_APP_ID = String(process.env.NEXT_PUBLIC_FB_APP_ID);
+const GTM_ID = String(process.env.NEXT_PUBLIC_GTM_ID);
 
 export const metadata: Metadata = {
   title: METADATA_TITLE,

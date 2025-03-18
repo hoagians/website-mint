@@ -33,21 +33,16 @@ CREATE TABLE "Partners" (
 );
 
 -- CreateTable
-CREATE TABLE "Blocked" (
-    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    "ipAddress" TEXT,
-    "city" TEXT,
-    "country" TEXT,
-    "asOrg" TEXT,
-    "timezone" TEXT,
-    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
-);
-
--- CreateTable
 CREATE TABLE "Records" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     "metadata" TEXT NOT NULL,
     "image" TEXT NOT NULL
+);
+
+-- CreateTable
+CREATE TABLE "Availability" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "available" BOOLEAN NOT NULL DEFAULT true
 );
 
 -- CreateIndex

@@ -1,5 +1,5 @@
 import { startStage1, WHITELIST_SIZE } from "@/app/lib/constants";
-import { addWhitelistEntry, getWhitelistSize, verifyWhitelistEntry } from "@/app/lib/prisma/Whitelist";
+import { createWhitelistEntry, getWhitelistSize, verifyWhitelistEntry } from "@/app/lib/orm/queries/whitelist";
 import * as Sentry from "@sentry/nextjs";
 import { PublicKey } from "@solana/web3.js";
 import { InteractionResponseType, InteractionType } from "discord-interactions";
@@ -35,7 +35,7 @@ const handleJoinCommand = async (channelId: string, userId: string, walletAddres
       throw new Error("You are already whitelisted!");
     }
 
-    const addWhitelist = await addWhitelistEntry(userId, walletAddress);
+    const addWhitelist = await createWhitelistEntry(userId, walletAddress);
 
     return handleDiscordResponse("You have been added to the whitelist!");
   } catch (error) {

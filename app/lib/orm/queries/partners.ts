@@ -1,4 +1,4 @@
-import prisma from "./Prisma";
+import prisma from "../prisma";
 
 export const getPartnerStatus = async (walletAddress: string) => {
   return await prisma.partners.findUnique({

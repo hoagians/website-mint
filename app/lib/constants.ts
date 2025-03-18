@@ -1,21 +1,15 @@
-// General settings
+// Metadata
 export const COLLECTION_NAME = "Hoagians"; // Name and username should be the same
 export const COLLECTION_DESCRIPTION = `Hoagians is an innovative collection of NFTs with an alien design. Each Hoagian is unique and surprising. Hoagians are the new trend in the market with potential for appreciation. Get your NFT before it’s gone!`;
 export const METADATA_DESCRIPTION = `Hoagians is an innovative collection of NFTs with an alien design. Each Hoagian is unique and surprising. Get your NFT before it’s gone!`;
 export const METADATA_TITLE = "Hoagians: Exclusive NFTs with alien design";
 
-// IDs
-export const GTM_ID = "GTM-NWGLGTB6";
-export const FB_APP_ID = "1989322008254480";
-
-// URLs
+// General settings
 export const BASE_URL = "https://www.hoagians.xyz";
-export const RPC_URL = "https://mainnet.helius-rpc.com/?api-key=88eaa316-a3cc-4243-8c7c-5e6ade38a46d";
+export const RPC_URL = String(process.env.NEXT_PUBLIC_RPC_URL);
 
 // Addresses
-export const COLLECTION = "Bd8SaGMipU3PWiP7CTKK4Yp6dvA5ndGwH1J14M1AgYYo";
-export const CREATOR1 = "6G95Zzxd8cikeY8W8a13A94Wv7SUiksKWq5gvbCoJTuN";
-export const CREATOR2 = "BuzEjzpYBL5c48F98KZ4u7T3i9LwWUPwHn6w9bCUdTdE";
+export const COLLECTION = String(process.env.NEXT_PUBLIC_COLLECTION);
 
 // Quantities
 export const MAX_PER_WALLET = 20;
@@ -40,10 +34,10 @@ export const endStage2 = new Date(Date.UTC(2025, 3, 5));
 export const startStage3 = new Date(Date.UTC(2025, 3, 6));
 
 // Social media
-export const DISCORD_URL = "https://discord.com/";
-export const FACEBOOK_URL = "https://www.facebook.com/";
-export const INSTAGRAM_URL = "https://www.instagram.com/";
-export const X_URL = "https://x.com/";
+export const DISCORD_URL = "";
+export const FACEBOOK_URL = "https://www.facebook.com/hoagians";
+export const INSTAGRAM_URL = "https://www.instagram.com/hoagians";
+export const X_URL = "https://x.com/hoagians";
 
 // Marketplaces
 export const MAGICEDEN_URL = "https://magiceden.io/marketplace/hoagians";

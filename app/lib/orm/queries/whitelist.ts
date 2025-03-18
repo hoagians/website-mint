@@ -1,6 +1,6 @@
-import prisma from "./Prisma";
+import prisma from "../prisma";
 
-export const addWhitelistEntry = async (userId: string, walletAddress: string) => {
+export const createWhitelistEntry = async (userId: string, walletAddress: string) => {
   return await prisma.whitelist.create({
     data: { userId, walletAddress },
   });
@@ -9,12 +9,6 @@ export const addWhitelistEntry = async (userId: string, walletAddress: string) =
 export const getWhitelistEntry = async (walletAddress: string) => {
   return await prisma.whitelist.findUnique({
     where: { walletAddress },
-  });
-};
-
-export const getWhitelistHasMinted = async () => {
-  return await prisma.whitelist.count({
-    where: { hasMinted: true },
   });
 };
 

@@ -19,11 +19,6 @@ export interface HandlerProps {
   isPartner: boolean;
 }
 
-export interface LowestAvailableId {
-  ip: string;
-  newId: number;
-}
-
 export interface MediaGroupProps {
   href: string;
   src: string;
@@ -72,17 +67,4 @@ export interface TabLinkProps {
   activeTab: Tab;
   isMobile: boolean;
   setActiveTab: (tab: Tab) => void;
-}
-
-export interface TimeValues {
-  time: number;
-  days: number;
-  hours: number;
-  minutes: number;
-  seconds: number;
-}
-
-export interface WhitelistEntry {
-  isWhitelisted: boolean;
-  hasMinted: boolean;
 }

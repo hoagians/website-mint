@@ -3,8 +3,8 @@
 import * as Sentry from "@sentry/nextjs";
 import { startStage1, startStage3 } from "../lib/constants";
 import { Quantities } from "../lib/interfaces";
-import { getMintedAssets, getPurchasedAssets } from "../lib/prisma/Assets";
-import { getWhitelistSize } from "../lib/prisma/Whitelist";
+import { getMintedAssets, getPurchasedAssets } from "../lib/orm/queries/assets";
+import { getWhitelistSize } from "../lib/orm/queries/whitelist";
 
 export const getQuantities = async (): Promise<Quantities> => {
   let whitelisted = 0;
@@ -16,20 +16,20 @@ export const getQuantities = async (): Promise<Quantities> => {
   try {
     if (NOW < startStage1.getTime()) {
       whitelisted = await getWhitelistSize();
-      // console.log("🟡 Service Response fetching quantity [getWhitelistSize]:", whitelisted);
+      // console.log("🟡 Service Response [getWhitelistSize]:", whitelisted);
     }
 
     if (startStage1.getTime() <= NOW && NOW < startStage3.getTime()) {
       purchased = await getPurchasedAssets();
-      // console.log("🟡 Service Response fetching quantity [getPurchasedAssets]:", purchased);
+      // console.log("🟡 Service Response [getPurchasedAssets]:", purchased);
     }
 
     if (startStage1.getTime() <= NOW) {
       minted = await getMintedAssets();
-      // console.log("🟡 Service Response fetching quantity [getMintedAssets]:", minted);
+      // console.log("🟡 Service Response [getMintedAssets]:", minted);
     }
   } catch (error) {
-    console.error("🔴 Service Response fetching quantity:", (error as Error).message);
+    // console.error("🔴 Service Response [getQuantities]:", (error as Error).message);
     Sentry.captureException(error);
     throw new Error("Server error. Please try again later.");
   }

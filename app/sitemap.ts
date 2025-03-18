@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { BASE_URL } from "../app/lib/constants";
+import { BASE_URL } from "./lib/constants";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return [

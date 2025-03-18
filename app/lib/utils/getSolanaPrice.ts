@@ -19,8 +19,10 @@ export const getSolanaPrice = () => {
     if (error) throw new Error(error);
     const solanaPrice = data ? data.solana.usd : undefined;
 
+    // console.log("🟡 API Response [getSolanaPrice]:", solanaPrice);
     return solanaPrice;
   } catch (error) {
+    // console.error("🔴 API ERROR [getSolanaPrice]:", (error as Error).message);
     Sentry.captureException(error);
   }
 };
