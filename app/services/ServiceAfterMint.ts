@@ -2,10 +2,12 @@
 
 import * as Sentry from "@sentry/nextjs";
 import { HandlerProps } from "../lib/interfaces";
+import { createAssetEntry } from "../lib/orm/queries/assets";
 import { updatePartnerStatus } from "../lib/orm/queries/partners";
 import { getRecord } from "../lib/orm/queries/records";
 import { updateWhitelistEntry } from "../lib/orm/queries/whitelist";
 import { getExplorerUrl } from "../lib/utils/getExplorerUrl";
+import { getLocationFromIp } from "../lib/utils/getLocationFromIp";
 
 const DISCORD_MINTING_URL = String(process.env.DISCORD_MINTING_WEBHOOK_URL);
 
@@ -47,7 +49,25 @@ const postDiscord = async (id: number, assetPublicKey: string) => {
   });
 };
 
-export const actionsAfterMint = async ({ assetId, asset, owner, isWhitelisted, isPartner }: HandlerProps): Promise<void> => {
+export const actionsAfterMint = async ({
+  assetId,
+  price,
+  asset,
+  owner,
+  ipAddress,
+  isWhitelisted,
+  isPartner,
+}: HandlerProps): Promise<void> => {
+  try {
+    const locationFromIp = await getLocationFromIp(ipAddress);
+    const { city, country, asOrg, timezone } = locationFromIp;
+    const response = await createAssetEntry(assetId, price, asset, owner, ipAddress, city, country, asOrg, timezone);
+    // console.log("🟡 Service Response [createAssetEntry]:", response);
+  } catch (error) {
+    // console.error("🔴 Service Error [createAssetEntry]:", (error as Error).message);
+    Sentry.captureException(error);
+  }
+
   try {
     const response = await postDiscord(assetId, asset);
     const { status, statusText } = response;

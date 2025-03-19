@@ -10,11 +10,12 @@ import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import { addMinutes, isWithinInterval, subMinutes } from "date-fns";
 import React, { useCallback, useEffect, useState } from "react";
 import { startStage1, startStage2, startStage3 } from "../app/lib/constants";
-import { MintProps } from "../app/lib/interfaces";
+import { HandlerProps, MintProps } from "../app/lib/interfaces";
 import { getExplorerUrl } from "../app/lib/utils/getExplorerUrl";
+import { getIpAddress } from "../app/lib/utils/getIpAddress";
 import { actionsAfterError } from "../app/services/ServiceAfterError";
 import { actionsAfterMint } from "../app/services/ServiceAfterMint";
-import { createAssetTx } from "../app/services/TxBuilderService";
+import { txBuilder } from "../app/services/TxBuilderService";
 import styles from "../styles/mint.module.css";
 import { Countdown } from "./Countdown";
 import { MintInfo } from "./MintInfo";
@@ -50,7 +51,7 @@ export const Mint: React.FC<MintProps> = ({ numMinted, solPrice, onNumMintedChan
   }, [numMinted, solPrice]);
 
   const handleMintSuccess = useCallback(
-    async (assetId: number, asset: string, owner: string, isWhitelisted: boolean, isPartner: boolean, price: number) => {
+    async ({ assetId, price, asset, owner, ipAddress, isWhitelisted, isPartner }: HandlerProps) => {
       const explorerUrl = getExplorerUrl(asset);
 
       setFormMessage(
@@ -66,7 +67,7 @@ export const Mint: React.FC<MintProps> = ({ numMinted, solPrice, onNumMintedChan
       setTimeout(() => setFormMessage(null), 14000);
 
       try {
-        await actionsAfterMint({ assetId, asset, owner, isWhitelisted, isPartner });
+        await actionsAfterMint({ assetId, price, asset, owner, ipAddress, isWhitelisted, isPartner });
       } catch (error) {
         Sentry.captureException(error);
       }
@@ -104,29 +105,26 @@ export const Mint: React.FC<MintProps> = ({ numMinted, solPrice, onNumMintedChan
   }, []);
 
   const handleMint = useCallback(async () => {
-    let assetId;
     let anyError = null;
+    let assetId;
 
     try {
-      // console.time("⚪ Time:");
       setSpinner(true);
 
       if (!publicKey) throw new Error("Wallet not connected!");
       umi.use(walletAdapterIdentity(walletAdapter, true));
 
-      // if (umi.identity.publicKey !== String(process.env.NEXT_PUBLIC_AUTHORITY))
-      //   throw new Error("Minting not allowed! Please wait, under construction.");
+      if (umi.identity.publicKey !== String(process.env.NEXT_PUBLIC_AUTHORITY))
+        throw new Error("Minting not allowed! Please wait, under construction.");
 
       const solBalance = await connection.getBalance(publicKey).then((balance) => balance / 1e9);
       if (solPrice && solBalance < solPrice) throw new Error("Insufficient balance!");
 
-      const response = await fetch("https://api.ipify.org?format=json");
-      const data = await response.json();
+      const ipAddress = await getIpAddress();
+      const owner = publicKey.toString();
 
-      const { id, assetPublicKey, price, isWhitelisted, isPartner, serializedTxAsString, error } = await createAssetTx(
-        umi.identity.publicKey,
-        data.ip
-      );
+      const result = await txBuilder(umi.identity.publicKey);
+      const { id, asset, price, isWhitelisted, isPartner, serializedTxAsString, error } = result;
 
       assetId = id;
 
@@ -159,7 +157,7 @@ export const Mint: React.FC<MintProps> = ({ numMinted, solPrice, onNumMintedChan
       });
       if (txResult.value.err) throw new Error("Transaction failed! Please try again.");
 
-      handleMintSuccess(assetId, assetPublicKey, publicKey.toString(), isWhitelisted, isPartner, price);
+      handleMintSuccess({ assetId, price, asset, owner, ipAddress, isWhitelisted, isPartner });
     } catch (error) {
       anyError = error;
       handleMintError(error as Error | string, assetId);
@@ -168,7 +166,6 @@ export const Mint: React.FC<MintProps> = ({ numMinted, solPrice, onNumMintedChan
       if (!anyError) onNumMintedChange(assetId);
       if (isNowWithinInterval(startStage2) || isNowWithinInterval(startStage3)) onQuantityChange();
       setSpinner(false);
-      // console.timeEnd("⚪ Time:");
     }
   }, [connection, publicKey, onNumMintedChange]);
 

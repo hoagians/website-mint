@@ -13,8 +13,10 @@ export interface CustomLocation {
 
 export interface HandlerProps {
   assetId: number;
+  price: number;
   asset: string;
   owner: string;
+  ipAddress: string;
   isWhitelisted: boolean;
   isPartner: boolean;
 }

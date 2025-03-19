@@ -12,7 +12,7 @@ import {
   startStage2,
   startStage3,
 } from "@/app/lib/constants";
-import { createAssetEntry, getAssetsByOwner, getPurchasedAssets } from "@/app/lib/orm/queries/assets";
+import { getAssetsByOwner, getPurchasedAssets } from "@/app/lib/orm/queries/assets";
 import { create, fetchCollection, mplCore } from "@metaplex-foundation/mpl-core";
 import { transferSol } from "@metaplex-foundation/mpl-toolbox";
 import {
@@ -34,14 +34,13 @@ import { getLowestAvailableId } from "../lib/orm/queries/availability";
 import { getPartnerStatus } from "../lib/orm/queries/partners";
 import { getRecord } from "../lib/orm/queries/records";
 import { getWhitelistEntry } from "../lib/orm/queries/whitelist";
-import { getLocationFromIp } from "../lib/utils/getLocationFromIp";
 
 const CREATOR1 = String(process.env.NEXT_PUBLIC_CREATOR1);
 const CREATOR2 = String(process.env.NEXT_PUBLIC_CREATOR2);
 
 const NOW = Date.now();
 
-export const createAssetTx = async (owner: PublicKey, ip: string): Promise<any> => {
+export const txBuilder = async (owner: PublicKey): Promise<any> => {
   const umi = createUmi(RPC_URL, "processed").use(mplCore());
 
   const secretKey = Base64.toUint8Array(String(process.env.SECRET_KEY));
@@ -56,19 +55,16 @@ export const createAssetTx = async (owner: PublicKey, ip: string): Promise<any> 
   let id;
 
   try {
-    const [assetId, purchasedAssets, assetsByOwner, whitelistEntry, partnerStatus, locationFromIp, fetchedCollection] =
-      await Promise.all([
-        getLowestAvailableId(),
-        getPurchasedAssets(),
-        getAssetsByOwner(owner),
-        getWhitelistEntry(owner),
-        getPartnerStatus(owner),
-        getLocationFromIp(ip),
-        fetchCollection(umi, COLLECTION),
-      ]);
+    const [assetId, purchasedAssets, assetsByOwner, whitelistEntry, partnerStatus, fetchedCollection] = await Promise.all([
+      getLowestAvailableId(),
+      getPurchasedAssets(),
+      getAssetsByOwner(owner),
+      getWhitelistEntry(owner),
+      getPartnerStatus(owner),
+      fetchCollection(umi, COLLECTION),
+    ]);
 
     id = assetId;
-    const { city, country, asOrg, timezone } = locationFromIp;
     const isWhitelisted = whitelistEntry && !whitelistEntry.hasMinted;
     const isPartner = partnerStatus ? true : false;
 
@@ -80,8 +76,6 @@ export const createAssetTx = async (owner: PublicKey, ip: string): Promise<any> 
     };
 
     const price = calculatePrice(purchasedAssets);
-
-    const insertedAsset = await createAssetEntry(assetId, price, assetPublicKey, owner, ip, city, country, asOrg, timezone);
 
     if (MAX_PER_WALLET <= assetsByOwner) {
       throw new Error("Minting not allowed! This wallet has reached its minting limit.");
@@ -164,9 +158,9 @@ export const createAssetTx = async (owner: PublicKey, ip: string): Promise<any> 
     // Encode Uint8Array to String and Return the Transaction to the Frontend
     const serializedTxAsString = base64.deserialize(serializedTx)[0];
 
-    return { id, assetPublicKey, price, isWhitelisted, isPartner, serializedTxAsString };
+    return { id, asset: assetPublicKey, price, isWhitelisted, isPartner, serializedTxAsString };
   } catch (error) {
-    // console.error("🔴 Service ERROR [createAssetTx]:", (error as Error).message);
+    // console.error("🔴 Service ERROR [txBuilder]:", (error as Error).message);
     Sentry.captureException(error);
 
     return { id, error: error instanceof Error ? (error as Error).message : "Server error. Please try again later." };
