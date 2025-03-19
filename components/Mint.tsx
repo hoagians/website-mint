@@ -114,8 +114,8 @@ export const Mint: React.FC<MintProps> = ({ numMinted, solPrice, onNumMintedChan
       if (!publicKey) throw new Error("Wallet not connected!");
       umi.use(walletAdapterIdentity(walletAdapter, true));
 
-      if (umi.identity.publicKey !== String(process.env.NEXT_PUBLIC_AUTHORITY))
-        throw new Error("Minting not allowed! Please wait, under construction.");
+      // if (umi.identity.publicKey !== String(process.env.NEXT_PUBLIC_AUTHORITY))
+      //   throw new Error("Minting not allowed! Please wait, under construction.");
 
       const solBalance = await connection.getBalance(publicKey).then((balance) => balance / 1e9);
       if (solPrice && solBalance < solPrice) throw new Error("Insufficient balance!");
