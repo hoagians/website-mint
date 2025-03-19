@@ -153,6 +153,12 @@ export const Mint: React.FC<MintProps> = ({ numMinted, solPrice, onNumMintedChan
       const txSignature = await umi.rpc.sendTransaction(signedTx);
       if (!txSignature) throw new Error("Transaction failed! Please try again.");
 
+      // Confirm the Transaction on the Solana Network
+      const txResult = await umi.rpc.confirmTransaction(txSignature, {
+        strategy: { type: "blockhash", ...(await umi.rpc.getLatestBlockhash()) },
+      });
+      if (txResult.value.err) throw new Error("Transaction failed! Please try again.");
+
       handleMintSuccess(assetId, assetPublicKey, publicKey.toString(), isWhitelisted, isPartner, price);
     } catch (error) {
       anyError = error;
