@@ -5,7 +5,7 @@ import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 
 const DISCORD_PUBLIC_KEY = String(process.env.DISCORD_PUBLIC_KEY);
-const RATE_LIMIT = 10;
+const RATE_LIMIT = 5;
 
 const rateLimitOptions = {
   uniqueTokenPerInterval: 500,
@@ -26,9 +26,16 @@ export async function middleware(request: NextRequest) {
   console.log(`🔵 [${new Date().toISOString()}] ${method} request to ${pathname} from ${ipAddress}`);
 
   // Redirect HTTP to HTTPS
-  if (hostname !== "localhost" && protocol === "http:") {
+  if (protocol === "http:" && hostname !== "localhost") {
     const httpsUrl = `https://${host}${pathname}`;
     return NextResponse.redirect(httpsUrl, 301);
+  }
+
+  // Verify allowed IP addresses
+  const allowedIps = ["35.196.132.85", "35.227.62.178", "35.237.4.214"];
+  if (!allowedIps.includes(ipAddress)) {
+    console.log(`🔵 [${new Date().toISOString()}] Unauthorized request from ${ipAddress}`);
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
   // Discord Request Signature Check and Rate Limiting
